@@ -1,0 +1,51 @@
+---
+- hosts: localhost
+  tasks:
+    - name: Installing node 
+      shell: |
+        curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash - && sudo apt-get install -y nodejs
+
+    - name: Installing forever
+      npm: name=forever global=yes state=present
+
+    - name: Cloning git repository
+      git: 
+        repo: https://github.com/CSC-DevOps/App
+        dest: App/
+      register: git_finished
+
+    - name: Running npm install
+      command: npm install 
+      args:
+        chdir: ./App/
+      register: npm_finished
+      when: git_finished.changed
+  
+    - name: Running app using forever
+      command: forever start ./App/main.js start
+
+    - name: Running forever list
+      command: sudo forever list
+      register: forever_list
+      changed_when: false
+    
+    - name: Displaying forever list output
+      debug: var=forever_list.stdout_lines 
+
+    - name: Ensuring bash, openssl, openssh-client and openssh-server are running latest versions
+      apt: 
+        #name: ['bash', 'openssl', 'openssh-client', 'openssh-server'] 
+        name: "{{ item }}"
+
+        #update_cache: yes 
+        #cache_valid_time: 3600 
+        state: latest
+      loop:
+        - bash
+        - openssl
+        - openssh-client
+        - openssh-server
+        
+
+    - name: Removing contents in /tmp/*
+      file: path=/tmp/* state=absent
