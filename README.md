@@ -1,12 +1,12 @@
 # Ansible-Playbook
 This ansible playbook can automate the following operations:  
-Install node  
-Install Forever  
-Pull a git repository  
-Install dependencies  
-Run the node js app present in the cloned repository  
-Check if bash, openssl, openssh-client, and openssh-server are running latest version  
-Clear the contents of tmp folder  
+- Install node  
+- Install Forever  
+- Pull a git repository  
+- Install dependencies  
+- Run the node js app present in the cloned repository  
+- Check if bash, openssl, openssh-client, and openssh-server are running latest version  
+- Clear the contents of tmp folder  
 
 To execute this playbook, first, you have to setup ansible.  
 
